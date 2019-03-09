@@ -4,10 +4,15 @@ let express = require('express');
 let path = require('path');
 let cookieParser = require('cookie-parser');
 let logger = require('morgan');
+let cors = require('cors');
 
 // modules for authentication
 let session = require('express-session');
 let passport = require('passport');
+let passportJWT = require('passport-jwt');
+let JWTStrategy = passportJWT.Strategy;
+let ExtractJWT = passportJWT.ExtractJwt;
+
 let passportLocal = require('passport-local');
 let localStrategy = passportLocal.Strategy;
 let flash = require('connect-flash');
@@ -69,9 +74,26 @@ passport.use(User.createStrategy());
 passport.serializeUser(User.serializeUser());
 passport.deserializeUser(User.deserializeUser());
 
+// verify that the token sent by the user - check if valid
+let jwtOptions = {};
+jwtOptions.jwtFromRequest = ExtractJWT.fromAuthHeaderAsBearerToken();
+jwtOptions.secretOrKey = DB.secret;
 
-app.use('/', indexRouter);
-app.use('/contact-list', contactRouter);
+let strategy = new JWTStrategy(jwtOptions, (jwt_payload, done) => {
+  User.findById(jwt_payload.id)
+    .then(user => {
+      return done(null, user);
+    })
+    .catch(err => {
+      return done(err, false);
+    });
+});
+
+passport.use(strategy);
+
+
+app.use('/api', indexRouter);
+app.use('/api/contact-list', contactRouter); // TODO -> add security
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
