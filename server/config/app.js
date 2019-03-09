@@ -47,6 +47,8 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '../../public')));
 app.use(express.static(path.join(__dirname, '../../node_modules')));
 
+app.use(cors());
+
 // setup express-session
 app.use(session({
   secret: "SomeSecret",
