@@ -34,7 +34,11 @@ export class HeaderComponent implements OnInit {
   }
 
   isLoggedIn(): boolean {
-    return this.authService.LoggedIn();
+    let result = this.authService.LoggedIn();
+    if(result) {
+      this.user = JSON.parse(localStorage.getItem('user'));
+    }
+    return result;
   }
 
 }
