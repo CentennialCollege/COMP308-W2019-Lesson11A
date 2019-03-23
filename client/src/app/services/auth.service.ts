@@ -12,7 +12,9 @@ export class AuthService {
   public user: User;
   private authToken: any;
 
-  private endpoint = 'http://localhost:3000/api/';
+  private endpoint = '/api/';
+
+  //private endpoint = 'http://localhost:3000/api/';
 
   private httpOptions = {
     headers: new HttpHeaders({
