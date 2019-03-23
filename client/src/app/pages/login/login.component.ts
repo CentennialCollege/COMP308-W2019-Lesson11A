@@ -23,7 +23,7 @@ export class LoginComponent implements OnInit {
     this.user = new User();
   }
 
-  private onLoginSubmit() {
+  onLoginSubmit() {
     this.authService.authenticateUser(this.user).subscribe(data => {
       if (data.success) {
         this.authService.storeUserData(data.token, data.user);
