@@ -24,7 +24,7 @@ export class ContactListService {
     })
   };
 
-  constructor(private http: HttpClient) {   
+  constructor(private http: HttpClient) {
     this.user = new User();
   }
 
